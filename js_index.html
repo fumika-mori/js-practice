@@ -19,47 +19,46 @@
     <footer>
     </footer>
     <script>
+        class Position {
+            constructor(ugomekun) {
+                this.x = 145
+                this.y = 200
+                this.ugomekun = ugomekun
+                this.ugomekun.style.top = this.y + 'px'
+                this.ugomekun.style.left = this.x + 'px'
+            }
+            add(x, y) {
+                this.x += x
+                this.y += y
+                this.ugomekun.style.left = this.x + 'px'
+                this.ugomekun.style.top = this.y + 'px'
+            }
+        }
+
         let messege = 'てすと'
         messege += 123
         messege = 100
         messege += '123'
         console.log(messege)
 
-
         let ugomekun = document.getElementById('ugomekun')
-        console.log(ugomekun)
-        ugomekun.style.left = '300px'
-        console.log(ugomekun.style.left)
-        ugomekun.style.top = '300px'
 
-        let y = 145
-        let x = 350
-
-        ugomekun.style.top = y + 'px'
-        ugomekun.style.left = x + 'px'
-
-        y += 100
-        ugomekun.style.top = y + 'px'
+        let position = new Position(ugomekun)
 
         window.addEventListener('keydown', function (event) {
             console.log('おした')
             console.log(event.key)
             if (event.key === 'ArrowRight') {
-                x += 10
-                ugomekun.style.left = x + 'px'
+                position.add(10, 0)
             }
             if (event.key === 'ArrowDown') {
-                y += 10
-                ugomekun.style.top = y + 'px'
+                position.add(0, 10)
             }
             if (event.key === 'ArrowLeft') {
-                x -= 10
-                ugomekun.style.left = x + 'px'
+                position.add(-10, 0)
             }
-
             if (event.key === 'ArrowUp') {
-                y -= 10
-                ugomekun.style.top = y + 'px'
+                position.add(0, -10)
             }
 
             if (event.key === 'ArrowLeft') {
@@ -68,9 +67,7 @@
             if (event.key === 'ArrowRight') {
                 ugomekun.classList.add('flip-horizontal')
             }
-
         })
-
 
     </script>
 </body>
