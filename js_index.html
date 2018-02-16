@@ -45,6 +45,10 @@
 
         let position = new Position(ugomekun)
 
+        let intervalId
+
+        let counter = 0
+
         window.addEventListener('keydown', function (event) {
             console.log('おした')
             console.log(event.key)
@@ -59,6 +63,26 @@
             }
             if (event.key === 'ArrowUp') {
                 position.add(0, -10)
+            }
+
+            if (event.key === 'c') {
+                if (intervalId) {
+                    return
+                }
+                // 右にぬるぬる10コマ分動く
+                intervalId = setInterval(function () {
+                    position.add(10, 0)
+                    counter += 1
+                    if (counter === 10) {
+                        clearInterval(intervalId)
+                        counter = 0
+                        intervalId = 0
+                    }
+                }, 1000 / 7);
+            }
+
+            if (event.key === 'v') {
+                clearInterval(intervalId)
             }
 
             if (event.key === 'ArrowLeft') {
