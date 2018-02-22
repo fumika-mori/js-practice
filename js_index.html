@@ -22,7 +22,7 @@
         class Position {
             constructor(ugomekun) {
                 this.x = 145
-                this.y = 200
+                this.y = 1100
                 this.ugomekun = ugomekun
                 this.ugomekun.style.top = this.y + 'px'
                 this.ugomekun.style.left = this.x + 'px'
@@ -45,44 +45,90 @@
 
         let position = new Position(ugomekun)
 
+        // 10コマ進んだ時に勝手に止まる設定で使いたいから
+        // キーを押した・止めた時に非同期で同じ変数を見たいから、
+        // function「'keydown', function (event) 」の外に出している
         let intervalId
-
         let counter = 0
+        /**
+         * うごめくんが自動で動くのを止める
+         */
+        function stopAutoMove() {
+            clearInterval(intervalId)
+            counter = 0
+            intervalId = 0
+        }
+
+        let jumpIntervalId
+
+        function stopJump() {
+            clearInterval(jumpIntervalId)
+            tenP = 0
+            jumpIntervalId = 0
+        }
+
+        let tenP = 0
+
+        /**
+         * うごめくんを飛ばす
+         */
+        function jump() {
+            console.log('')
+            if (jumpIntervalId) {
+                return
+            }
+            jumpIntervalId = setInterval(function () {
+                position.add(0, Math.sin(Math.PI * tenP) * -10)
+                if (tenP >= 1.9) {
+                    stopJump()  // 使っていたintervalIdを未使用に戻す設定
+                }
+                tenP += 0.1
+            }, 1000 / 80);
+        }
+
+
+        // 非同期処理が行われるのが下の「'keydown', function (event)」の部分
+        // 
 
         window.addEventListener('keydown', function (event) {
             console.log('おした')
             console.log(event.key)
+            // 右キーを押した時に右に10px動く
             if (event.key === 'ArrowRight') {
-                position.add(10, 0)
+                position.add(20, 0)
             }
+            // 下キーを押した時に下に10px動く
             if (event.key === 'ArrowDown') {
-                position.add(0, 10)
+                position.add(0, 20)
             }
+            // 左キーを押した時に左に10px動く
             if (event.key === 'ArrowLeft') {
-                position.add(-10, 0)
+                position.add(-20, 0)
             }
+            // 上キーを押した時に上に10px動く
             if (event.key === 'ArrowUp') {
-                position.add(0, -10)
+                position.add(0, -20)
             }
 
             if (event.key === 'c') {
+                // intervalIdが使われていた場合、自動で移動開始する処理をしない設定
                 if (intervalId) {
                     return
                 }
                 // 右にぬるぬる10コマ分動く
+                // 後から指示なして止まれるようにintervalIdは残しておく
                 intervalId = setInterval(function () {
                     position.add(10, 0)
                     counter += 1
-                    if (counter === 10) {
-                        clearInterval(intervalId)
-                        counter = 0
-                        intervalId = 0
+                    // 10コマ進んだら勝手に止まる設定
+                    if (counter === 60) {
+                        stopAutoMove()  // 使っていたintervalIdを未使用に戻す設定
                     }
-                }, 1000 / 7);
+                }, 1000 / 25);
             }
-
+            // vキーを手動で押した時、setIntarvalで繰り返される10コマ動く設定を中止する
             if (event.key === 'v') {
-                clearInterval(intervalId)
+                stopAutoMove()
             }
 
             if (event.key === 'ArrowLeft') {
@@ -90,6 +136,11 @@
             }
             if (event.key === 'ArrowRight') {
                 ugomekun.classList.add('flip-horizontal')
+            }
+
+            // うごめくんを飛ばす(jump)
+            if (event.key === ' ') {
+                jump()
             }
         })
 
