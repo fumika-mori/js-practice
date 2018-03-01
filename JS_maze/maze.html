@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>うごめくんは帰りたい</title>
+</head>
+
+<body>
+    <canvas id="maze"></canvas>
+    <script>
+
+        class BlockCreator {
+            constructor(context, blockSize) {
+                this.context = context
+                this.blockSize = blockSize
+            }
+            paintWall(x, y) {
+                this.context.fillStyle = '#484848'
+                this.context.fillRect((this.blockSize * x), (this.blockSize * y), this.blockSize, this.blockSize)
+            }
+            paintRoad(x, y) {
+                this.context.fillStyle = '#DDDDDD'
+                this.context.fillRect((this.blockSize * x), (this.blockSize * y), this.blockSize, this.blockSize)
+            }
+        }
+
+        (function () {
+            // マス目の設定　最低でも5以上の奇数でなければならない
+            let height = 11
+            let width = 15
+            let blockSize = 32
+            let canvas = document.getElementById('maze')
+            canvas.width = (width * blockSize)
+            canvas.height = (height * blockSize)
+
+            // とりあえずマスを敷き詰める
+            let context = canvas.getContext('2d')
+            // context.fillStyle = '#484848'
+            // context.fillRect((blockSize * 0), (blockSize * 0), blockSize, blockSize)
+            // context.fillRect((blockSize * 1), (blockSize * 0), blockSize, blockSize)
+            // context.fillRect((blockSize * 2), (blockSize * 0), blockSize, blockSize)
+            // context.fillRect((blockSize * 3), (blockSize * 0), blockSize, blockSize)
+            // context.fillRect((blockSize * 0), (blockSize * 1), blockSize, blockSize)
+            // context.fillRect((blockSize * 0), (blockSize * 2), blockSize, blockSize)
+
+            // context.fillStyle = '#f8f8f8'
+            // context.fillRect((blockSize * 1), (blockSize * 1), blockSize, blockSize)
+
+            let blockCreator = new BlockCreator(context, blockSize)
+            // blockCreator.paintWall(0, 0)
+            // blockCreator.paintWall(1, 0)
+            // blockCreator.paintWall(2, 0)
+            // blockCreator.paintWall(3, 0)
+            // blockCreator.paintWall(0, 1)
+            // blockCreator.paintWall(0, 2)
+
+            // blockCreator.paintRoad(1, 1)
+            // blockCreator.paintRoad(2, 1)
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    console.log(x)
+
+                    // もし〜なら って感じ ||で条件を追加できる
+                    if (x === 0 || y === 0 || x === width - 1 || y === height - 1) {
+                        blockCreator.paintWall(x, y)
+                    } else {
+                        blockCreator.paintRoad(x, y)
+                    }
+                }
+            }
+
+        })()
+
+    </script>
+</body>
+
+</html>
